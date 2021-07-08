@@ -1,6 +1,11 @@
 package com.microservices.UsersApi.shared;
 
-public class UserDto {
+import java.io.Serializable;
+
+public class UserDto implements Serializable {
+	
+	private static final long serialVersionUID = -8142123051270051013L;
+	
 	private String firstName;
 	private String lastName;
 	private String email;
