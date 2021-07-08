@@ -1,5 +1,7 @@
 package com.microservices.UsersApi.controller;
 
+import javax.validation.Valid;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,7 +21,7 @@ public class UserController {
 	}
 	
 	@PostMapping
-	public String createUser(@RequestBody UserModel userObj)
+	public String createUser(@Valid @RequestBody UserModel userObj)
 	{
 		return "createUser was called";
 	}
