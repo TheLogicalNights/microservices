@@ -7,5 +7,5 @@ import com.microservices.UsersApi.entity.UserEntity;
 
 @Service
 public interface UserRepo extends CrudRepository<UserEntity, Long> {
-
+	public UserEntity findByEmail(String email); 
 }
