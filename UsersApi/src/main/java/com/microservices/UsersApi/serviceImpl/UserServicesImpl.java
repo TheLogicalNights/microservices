@@ -1,10 +1,14 @@
 package com.microservices.UsersApi.serviceImpl;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -43,6 +47,15 @@ public class UserServicesImpl implements UserServices {
 		UserEntity userEntityObj=modelMapper.map(userDetails, UserEntity.class);
 		userRepositoryObj.save(userEntityObj);
 		return true;
+	}
+
+
+
+	@Override
+	public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+		UserEntity userEntityObj = userRepositoryObj.findByEmail(username);
+		if(userEntityObj==null) throw new UsernameNotFoundException(username);
+		return new User(userEntityObj.getEmail(),userEntityObj.getEncryptedPassword(),true,true,true,true,new ArrayList<>());
 	}
 
 }
