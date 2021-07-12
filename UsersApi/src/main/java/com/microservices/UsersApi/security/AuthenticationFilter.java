@@ -1,7 +1,10 @@
 package com.microservices.UsersApi.security;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -30,4 +33,12 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 		}
 	}
 	
+	@Override
+	protected void successfulAuthentication(HttpServletRequest request, 
+											HttpServletResponse response, 
+											FilterChain chain,
+											Authentication authResult) throws IOException, ServletException {
+		
+	}
+
 }
