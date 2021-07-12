@@ -2,6 +2,7 @@ package com.microservices.UsersApi.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.env.Environment;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -13,12 +14,14 @@ import com.microservices.UsersApi.services.UserServices;
 @Configuration
 @EnableWebSecurity
 public class WebSecurity extends WebSecurityConfigurerAdapter{
+	private Environment enviromentObj;
 	private UserServices usersServiceObj;
 	private BCryptPasswordEncoder bCryptPasswordEncoderObj;
 	
 	@Autowired
-	public WebSecurity(UserServices usersServiceObj, BCryptPasswordEncoder bCryptPasswordEncoderObj)
+	public WebSecurity(Environment enviromentObj,UserServices usersServiceObj, BCryptPasswordEncoder bCryptPasswordEncoderObj)
 	{
+		this.enviromentObj = enviromentObj;
 		this.usersServiceObj = usersServiceObj;
 		this.bCryptPasswordEncoderObj = bCryptPasswordEncoderObj;
 	}
@@ -38,7 +41,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter{
 	
 	private AuthenticationFilter getAuthenticationFilter() throws Exception
 	{
-		AuthenticationFilter authenticationFilterObj = new AuthenticationFilter();
+		AuthenticationFilter authenticationFilterObj = new AuthenticationFilter(usersServiceObj,enviromentObj);
 		authenticationFilterObj.setAuthenticationManager(authenticationManager());
 		return authenticationFilterObj;
 	}
