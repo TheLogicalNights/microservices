@@ -18,7 +18,7 @@ public class PostsServicveImpl implements PostsService {
 	@Autowired
 	PostModel postModel2;
 	@Override
-	public List<PostModel> getPosts() 
+	public List<PostModel> getPosts(String id) 
 	{
 		List<PostModel> returnValue = new ArrayList<>();
 		postModel1.setPostId(UUID.randomUUID().toString());
