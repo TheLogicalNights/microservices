@@ -22,11 +22,13 @@ public class PostsServicveImpl implements PostsService {
 	{
 		List<PostModel> returnValue = new ArrayList<>();
 		postModel1.setPostId(UUID.randomUUID().toString());
+		postModel1.setUserId(id);
 		postModel1.setPostTitle("Demo post");
 		postModel1.setPostDescription("This is the first demo post");
 		postModel1.setPostDate(new Date());
 		
 		postModel2.setPostId(UUID.randomUUID().toString());
+		postModel2.setUserId(id);
 		postModel2.setPostTitle("Demo post");
 		postModel2.setPostDescription("This is the second demo post");
 		postModel2.setPostDate(new Date());
