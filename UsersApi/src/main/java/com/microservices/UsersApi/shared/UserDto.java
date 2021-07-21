@@ -1,6 +1,9 @@
 package com.microservices.UsersApi.shared;
 
 import java.io.Serializable;
+import java.util.List;
+
+import com.microservices.UsersApi.model.PostModel;
 
 public class UserDto implements Serializable {
 	
@@ -12,6 +15,7 @@ public class UserDto implements Serializable {
 	private String password;
 	private String userId;
 	private String encryptedPassword;
+	private List<PostModel> posts;
 
 	public String getFirstName() {
 		return firstName;
@@ -59,6 +63,14 @@ public class UserDto implements Serializable {
 
 	public void setEncryptedPassword(String encryptedPassword) {
 		this.encryptedPassword = encryptedPassword;
+	}
+
+	public List<PostModel> getPosts() {
+		return posts;
+	}
+
+	public void setPosts(List<PostModel> posts) {
+		this.posts = posts;
 	}
 
 }
