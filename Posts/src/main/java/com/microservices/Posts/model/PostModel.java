@@ -7,9 +7,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class PostModel {
 	private String postId;
+	private String userId;
 	private String postTitle;
 	private String postDescription;
 	private Date postDate;
+	
 	public String getPostId() {
 		return postId;
 	}
@@ -33,6 +35,12 @@ public class PostModel {
 	}
 	public void setPostDate(Date postDate) {
 		this.postDate = postDate;
+	}
+	public String getUserId() {
+		return userId;
+	}
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 	
 	
