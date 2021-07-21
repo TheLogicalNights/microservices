@@ -1,19 +1,25 @@
 package com.microservices.UsersApi.serviceImpl;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.microservices.UsersApi.entity.UserEntity;
+import com.microservices.UsersApi.model.PostModel;
 import com.microservices.UsersApi.repository.UserRepo;
 import com.microservices.UsersApi.services.UserServices;
 import com.microservices.UsersApi.shared.UserDto;
@@ -23,14 +29,16 @@ public class UserServicesImpl implements UserServices {
 
 	@Autowired
 	UserRepo userRepositoryObj;
+	RestTemplate restTemplate;
 	//for password encryption
 	BCryptPasswordEncoder bCryptPasswordEncoder;
 	
 	
 	@Autowired
-	public UserServicesImpl(BCryptPasswordEncoder bCryptPasswordEncoder) 
+	public UserServicesImpl(BCryptPasswordEncoder bCryptPasswordEncoder,RestTemplate restTemplate) 
 	{
 		this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+		this.restTemplate = restTemplate;
 	}
 
 
@@ -77,7 +85,13 @@ public class UserServicesImpl implements UserServices {
 	public UserDto getUserByUserId(String userId) {
 		UserEntity userEntity = userRepositoryObj.findByUserId(userId);
 		if(userEntity==null) throw new UsernameNotFoundException(userId);
-		return new ModelMapper().map(userEntity, UserDto.class);
+		UserDto userDto = new ModelMapper().map(userEntity, UserDto.class);
+		String postUrl = String.format("http://POSTS-WS/users/%s/posts",userId);
+		ResponseEntity<List<PostModel>> postListResponse = restTemplate.exchange(postUrl,HttpMethod.GET,null,new ParameterizedTypeReference<List<PostModel>>() {
+		});
+		List<PostModel> postList = postListResponse.getBody();
+		userDto.setPosts(postList);
+		return userDto;
 	}
 
 }
