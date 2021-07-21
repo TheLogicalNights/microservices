@@ -7,4 +7,5 @@ import com.microservices.UsersApi.shared.UserDto;
 public interface UserServices extends UserDetailsService{
 	Boolean createUser(UserDto userDetails);
 	UserDto getUserByEmail(String email);
+	UserDto getUserByUserId(String userId);
 }
