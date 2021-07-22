@@ -19,6 +19,7 @@ import org.springframework.web.client.RestTemplate;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.microservices.UsersApi.entity.UserEntity;
+import com.microservices.UsersApi.feign.PostFeignClient;
 import com.microservices.UsersApi.model.PostModel;
 import com.microservices.UsersApi.repository.UserRepo;
 import com.microservices.UsersApi.services.UserServices;
@@ -29,16 +30,22 @@ public class UserServicesImpl implements UserServices {
 
 	@Autowired
 	UserRepo userRepositoryObj;
+	//RestTemplate
 	RestTemplate restTemplate;
 	//for password encryption
 	BCryptPasswordEncoder bCryptPasswordEncoder;
+	//Feign client
+	PostFeignClient postFeignClientObj;
 	
 	
 	@Autowired
-	public UserServicesImpl(BCryptPasswordEncoder bCryptPasswordEncoder,RestTemplate restTemplate) 
+	public UserServicesImpl(BCryptPasswordEncoder bCryptPasswordEncoder,
+			RestTemplate restTemplate,
+			PostFeignClient postFeignClientObj) 
 	{
 		this.bCryptPasswordEncoder = bCryptPasswordEncoder;
 		this.restTemplate = restTemplate;
+		this.postFeignClientObj = postFeignClientObj;
 	}
 
 
@@ -86,10 +93,18 @@ public class UserServicesImpl implements UserServices {
 		UserEntity userEntity = userRepositoryObj.findByUserId(userId);
 		if(userEntity==null) throw new UsernameNotFoundException(userId);
 		UserDto userDto = new ModelMapper().map(userEntity, UserDto.class);
-		String postUrl = String.format("http://POSTS-WS/users/%s/posts",userId);
+		
+		//Communication between microservices using feign client
+		
+		/*String postUrl = String.format("http://POSTS-WS/users/%s/posts",userId);
 		ResponseEntity<List<PostModel>> postListResponse = restTemplate.exchange(postUrl,HttpMethod.GET,null,new ParameterizedTypeReference<List<PostModel>>() {
 		});
 		List<PostModel> postList = postListResponse.getBody();
+		*/
+		
+		//Communication between microservices using feign client
+		List<PostModel> postList = postFeignClientObj.getPosts(userId);
+
 		userDto.setPosts(postList);
 		return userDto;
 	}
