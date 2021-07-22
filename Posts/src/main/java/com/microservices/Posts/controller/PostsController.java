@@ -15,7 +15,7 @@ import com.microservices.Posts.model.PostModel;
 import com.microservices.Posts.serviceImp.PostsServicveImpl;
 
 @RestController
-@RequestMapping("users/{id}/posts")
+@RequestMapping("/users/{id}/posts")
 public class PostsController {
 	
 	@Autowired
