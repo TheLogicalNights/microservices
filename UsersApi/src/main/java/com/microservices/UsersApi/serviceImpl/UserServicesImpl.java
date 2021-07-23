@@ -6,6 +6,8 @@ import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -25,6 +27,8 @@ import com.microservices.UsersApi.repository.UserRepo;
 import com.microservices.UsersApi.services.UserServices;
 import com.microservices.UsersApi.shared.UserDto;
 
+import feign.FeignException;
+
 @Service
 public class UserServicesImpl implements UserServices {
 
@@ -37,7 +41,7 @@ public class UserServicesImpl implements UserServices {
 	//Feign client
 	PostFeignClient postFeignClientObj;
 	
-	
+	Logger logger = LoggerFactory.getLogger(this.getClass());
 	@Autowired
 	public UserServicesImpl(BCryptPasswordEncoder bCryptPasswordEncoder,
 			RestTemplate restTemplate,
@@ -103,9 +107,15 @@ public class UserServicesImpl implements UserServices {
 		*/
 		
 		//Communication between microservices using feign client
-		List<PostModel> postList = postFeignClientObj.getPosts(userId);
-
-		userDto.setPosts(postList);
+		try
+		{
+			List<PostModel> postList = postFeignClientObj.getPosts(userId);
+			userDto.setPosts(postList);
+		}
+		catch(FeignException e)
+		{
+			logger.error(e.getLocalizedMessage());
+		}
 		return userDto;
 	}
 
