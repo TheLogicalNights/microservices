@@ -109,8 +109,10 @@ public class UserServicesImpl implements UserServices {
 		//Communication between microservices using feign client
 		try
 		{
+			logger.info("Before calling posts microservice");
 			List<PostModel> postList = postFeignClientObj.getPosts(userId);
 			userDto.setPosts(postList);
+			logger.info("After calling posts microservice");
 		}
 		catch(FeignException e)
 		{
