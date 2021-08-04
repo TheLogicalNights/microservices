@@ -98,7 +98,7 @@ public class UserServicesImpl implements UserServices {
 		if(userEntity==null) throw new UsernameNotFoundException(userId);
 		UserDto userDto = new ModelMapper().map(userEntity, UserDto.class);
 		
-		//Communication between microservices using feign client
+		//Communication between microservices using rest template
 		
 		/*String postUrl = String.format("http://POSTS-WS/users/%s/posts",userId);
 		ResponseEntity<List<PostModel>> postListResponse = restTemplate.exchange(postUrl,HttpMethod.GET,null,new ParameterizedTypeReference<List<PostModel>>() {
